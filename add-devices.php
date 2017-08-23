@@ -1,77 +1,4 @@
-<?php
-    $host     = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname   = "inventory";
-    // var_dump($dbname); // inventory
-
-    $conn = mysqli_connect($host, $username, $password, $dbname);
-    if(!$conn){
-        die("Connectin Failed:" . mysqli_connect_error());
-    }
-
-    $device_name = $brand = $quantity = $device_type = $device_assign = '';
-    $device_nameErr = $brandErr = $quantityErr = $device_typeErr = $device_assignErr = '';
-    $error = "";
-
-    if(isset($_POST['btn-save'])){
-    // variables for input data
-    $device_name   = $_POST['device_name'];
-    $brand         = $_POST['brand'];
-    $quantity      = $_POST['quantity'];
-    $device_type   = $_POST['device_type'];
-    echo $device_type;
-    die();
-    $device_assign = $_POST['device_assign'];
-
-    if(empty($device_name) || empty($brand) || empty($quantity) || empty($device_type) || empty($device_assign)){
-        $error = "Fields can not be empty";
-            
-            if(empty($device_name)){
-                $device_nameErr = "Device name is required";
-                $error = 1;
-            }
-
-            if(empty($brand)){
-                $brandErr = "Brand name is required";
-                $error = 1;
-            }
-
-            if(empty($quantity)){
-                $quantityErr = "Quantity is required";
-                $error = 1;
-            }
-
-            // if(empty($device_type)){
-            //     $device_typeErr = "required";
-            //     $error = 1;
-            // }
-
-    } else {
-             
-                 if(!preg_match("/^[a-zA-Z ]*$/",$device_name)) {
-                    $device_nameErr = "only letters and white space allowed";
-                    $error = 1;
-                } else {
-                    $device_name = trim($device_name);
-                }
-            }
-             if($error != 1){
-                 $sql = "INSERT INTO company_assets(device_name,brand,quantity,device_type,device_assign) 
-                 VALUES('$device_name','$brand','$quantity','$device_type','$device_assign')";
-
-                 if (mysqli_query($conn, $sql)) {
-                    $success = "Device added Successfully";
-                 }else {
-                    $adderr ="There was problem while adding.";
-                 }
-        }
-
-    
-}
-    mysqli_close($conn);
-?>
-
+                  
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,110 +6,145 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/custom.css">
-	
-	<style type="text/css">
-		/* Add a black background color to the top navigation */
-        .topnav {
-            background-color: #333;
+	    <!-- datepicker css and script -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+        $( "#datepicker" ).datepicker();
+        } );
+        </script>  <!-- datepicker css and script -->
+    	<style type="text/css">
+    		/* Add a black background color to the top navigation */
+            .topnav {
+                background-color: #333;
+                overflow: hidden;
+            }
+
+            /* Style the links inside the navigation bar */
+            .topnav a {
+                float: left;
+                display: block;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+            /* Change the color of links on hover */
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            /* Add a color to the active/current link */
+            .topnav a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+            h4{
+                color: blue;
+            }
+
+            .error{
+                color: red;
+            }
+            .select-style {
+            border: 1px solid #ccc;
+            width: 200px;
+            border-radius: 3px;
             overflow: hidden;
-        }
+            background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;
+            }
 
-        /* Style the links inside the navigation bar */
-        .topnav a {
-            float: left;
-            display: block;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 17px;
-        }
+            .select-style select {
+            padding: 5px 8px;
+            width: 200px;
+            border: none;
+            box-shadow: none;
+            background: transparent;
+            background-image: none;
+            -webkit-appearance: none;
+            }
 
-        /* Change the color of links on hover */
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        /* Add a color to the active/current link */
-        .topnav a.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-        h4{
-            color: blue;
-        }
-
-        .error{
-            color: red;
-        }
-	</style>
+            .select-style select:focus {
+            outline: none;
+            }
+    	</style>
 </head>
 <body>
 	<div class="container">
-
-        <center>
             <div id="body">
-             <div id="content">
-           
-         <div class="container-fluid">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                 <table class="table table-bordered">
-                    <caption><b><h4>Add New Device Details:</h4></b></caption>
-                    <?php 
-                        if(isset($success)){
-                        	echo $success;
-                        	if (isset($adderr)) {
-                        		echo $adderr;
-                        	}
-                        }
-                    ?>
-                        <tr>
-                            <td align="center"><a href="index.php">&larr;Back</a></td>
-                        </tr>
+               <div id="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                                <div class="col-md-8">
+                                    
+                                    <form method="post" action="process/device.php">
+                                        <table class="table table-bordered">
+                                            <caption><b><h4 align="right">Add New Device Details:</h4></b></caption>
 
-                        <tr>
-                            <td>Device Name* <input type="text" name="device_name" 
-                            value="<?php echo $device_name;?>" />
-                            <span class="error"><?php echo $device_nameErr;?></span></td>
-                        </tr>
+                                            <tr>
+                                                <td align="center"><a href="list-devices.php">&larr;Back</a></td>
+                                                <td style="color: #2acccc; font-size: 20px">Enter Device Details</td>
+                                            </tr>
 
-                        <tr>
-                            <td>Brand*<input type="text" name="brand" 
-                            value="<?php echo $brand;?>" /> 
-                            <span class="error"><?php echo $brandErr;?></span></td>
-                        </tr>
+                                            <tr>
+                                                <td>Device Name: </td>
+                                                <td><input type="text" name="device_name" autocomplete="off"/>
+                                                <span class="error"></span></td>
+                                            </tr>
 
-                        <tr>
-                            <td>Quantity*<input type="number" name="quantity" min="1" 
-                            value="<?php echo $quantity; ?>" />
-                            <span class="error"><?php echo $quantityErr;?></span
-                            </td>
-                        </tr>
+                                            <tr>
+                                                <td>Brand:</td>
+                                                <td><input type="text" name="brand" autocomplete="off"/> 
+                                                <span class="error"></span></td>
+                                            </tr>
 
-                        <tr>
-                            <td>Device Type*
-                            <select name="device_type">
-                              <option value="" disabled="disabled">--Select Device--</option> 
-                                <option value="electronics">Electronics</option>
-                                <option value="network">Network</option>
-                                <option value="others">Others</option>
-                            </select>
-                            </td>
-                        </tr>
-                        
-                        <tr>
-                            <td><input type="date" name="device_assign" /></td>
-                        </tr>
+                                            <tr>
+                                                <td>Quantity:</td>
+                                                <td><input type="number" name="quantity" min="1" autocomplete="off"/>
+                                                <span class="error"></span
+                                                </td>
+                                            </tr>
 
-                        <tr>
-                            <td><button type="submit" name="btn-save"><strong>SAVE</strong></button></td>
-                        </tr>
-                    </table>
-                </form>
+                                            <tr>
+                                                <td>Select Device</td>
+                                                <td>
+                                                    <select name="device_type" class="select-style">
+                                                     <option value = "" disabled selected>--Select Device--</option>
+                                                        <option value="electronics">Electronics</option>
+                                                        <option value="network">Network</option>
+                                                        <option value="others">Others</option>
+                                                    </select><span class="error">
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Date: <span class="glyphicon glyphicon-calendar"></span></td>
+                                                <td>         
+                                                 
+                                                   <input type="text" name="device_assign" id="datepicker" placeholder="click here" 
+                                                   style="padding-right: 40px">
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td align="right" colspan="2"><button type="submit" name="btn-save"><strong>SAVE</strong>
+                                                </button></td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                     <?php include ('inc/footer.php');?>
+                                </div>
+                            <div class="col-md-2">
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-        </center>
-    </body>
+    </div>
+</body>
 </html>

@@ -1,20 +1,6 @@
 <?php
-// error_reporting(0);
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "inventory";
-
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-//print_r($conn);die;
-if(!$conn){
-	die("Connection failed: " . mysqli_connect_error());
-}
-
-$sql = "SELECT * FROM employee";
-// var_dump($sql);
-$result = mysqli_query($conn, $sql);
-mysqli_close($conn);
+	include'db/dbQuery.php';
+	include'inc/debugger.php';
 ?>
 
 <!DOCTYPE html>
@@ -23,11 +9,9 @@ mysqli_close($conn);
 	<?php 
    	 include('inc/head.php');
 	?>
-
-
-		<div class="container-fluid">
+	<div class="container-fluid">
 			 <table class="table table-bordered">
-			 	<caption><b><h4>List Employee Details:</h4></b></caption>
+			 	<caption><b><h4><i class="glyphicons glyphicons-user"></i>List Employee Details:</h4></b></caption>
 				<thead>
 					<tr bgcolor="blue">
 						<th width="7%" style="color: white">Emp. No</th>
@@ -42,31 +26,39 @@ mysqli_close($conn);
 
 				<tbody>
 				 <?php 
-					$i = 1;
-              		// while ($listemployee = mysqli_fetch_assoc($result))
-					foreach ($result as $listemployee) {
-					?>
-					 <tr>
-		                <td><?php echo $i;?></td>
-		                <td><?php echo $listemployee['fullname']; ?></td>
-		                <td><?php echo $listemployee['designation']; ?></td>
-		                <td><?php echo $listemployee['department']; ?></td>
-		                <td><?php echo $listemployee['email']; ?></td>
-		                <td>
-		                <a href="view-employee-details.php?id=<?php echo $listemployee['id']; ?>" title="View" class="btn btn-primary" style="border-radius: 15%;"><i class="fa fa-w fa-pencil"><i class="glyphicon glyphicon-eye-open"></i></a>
+				 	$employee = getAllEmployee();
+				 	// debugger($employee, true);
+				 	// die;
+				 	if($employee){
+						$i = 1;
+						foreach ($employee as $key => $listemployee) { ?>
+							<tr>
+				                <td><?php echo $i;?></td>
+				                <td><?php echo $listemployee['fullname']; ?></td>
+				                <td><?php echo $listemployee['designation']; ?></td>
+				                <td><?php echo $listemployee['department']; ?></td>
+				                <td><?php echo $listemployee['email']; ?></td>
+				                <td>
+				                <a href="view-employee-details.php?id=<?php echo $listemployee['id']; ?>" title="view" class="btn btn-primary" style="border-radius: 15%;"><i class="glyphicon glyphicon-eye-open"></i></a>
 
-						<a href="edit-employee-details.php?id=<?php echo $listemployee['id']; ?>" title="Edit" class="btn btn-warning" style="border-radius: 15%;"><i class="fa fa-w fa-pencil"><i class="glyphicon glyphicon-edit"></i></a>
+								<a href="edit-employee.php?id=<?php echo $listemployee['id']; ?>" title="edit" class="btn btn-warning" style="border-radius: 15%;"><i class="glyphicon glyphicon-edit"></i></a>
 
-						<a href="delete-employee.php?id=<?php echo $listemployee['id']; ?>" onClick="return confirm('Are You Sure?')" title="Delete" class="btn btn-danger" style="border-radius: 15%;"><i class="glyphicon glyphicon-trash"></i></a>
-						</td>   
-					</tr>
-		       		 <?php
-		       		  	$i++;
-		            } ?> 
-		           		  
+								<a href="process/employee.php?id=<?php echo $listemployee['id']; ?>" onClick="return confirm('Are You Sure?')" title="delete" class="btn btn-danger" style="border-radius: 15%;"><i class="glyphicon glyphicon-trash"></i></a>
+
+								</td>   
+
+							</tr>
+						     <?php
+			                   	$i++;
+			                   } 
+			                 } else { ?>
+		                        <tr>
+		                      		<td colspan="6">Sorry! No Employee Found.</td>
+								</tr>
+			                    <?php } ?>
 				</tbody>
 			</table>
-				
+			<?php include ('inc/footer.php');?>	
 		</div>
 </body>
 </html>

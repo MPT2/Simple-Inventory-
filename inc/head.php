@@ -29,8 +29,8 @@
 
         /* Add a color to the active/current link */
         .topnav a.active {
-            background-color: #FF6666
-;
+            background-color: #FF6666;
+
             color: #fff;
         }
         h2 {
@@ -39,7 +39,7 @@
 
         }
         h4{
-            color: blue;
+            color: black;
         }
 
     </style>
@@ -50,9 +50,9 @@
         <!--top menu-->
         <div class="topnav" id="myTopnav">
             <a href="index.php" class="active"><i class="glyphicon glyphicon-home"></i></a> 
-            <a href="about.php">About</a> 
-            <a href="add-employee.php">Add Employee</a> 
-            <a href="add-devices.php">Add Devices</a>   
-            <a href="list-devices.php">List Devices</a>
+            <a href="about.php"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;About</a> 
+            <a href="add-employee.php"><i class="glyphicon glyphicon-user"></i>&nbsp;Add Employee</a> 
+            <a href="add-devices.php"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Add Devices</a>   
+            <a href="list-devices.php"><i class="glyphicon glyphicon-list"></i>&nbsp;List Devices</a>
         </div><br>
     <div class="clearfix"></div>
